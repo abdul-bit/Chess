@@ -2,12 +2,12 @@ package pieces;
 
 import java.util.Collection;
 import java.util.Collections;
-
 import board.Board;
 import board.Move;
 import board.Square;
 import java.util.ArrayList;
 import board.BoardUtils;
+import board.Move.*;
 
 public class Knight extends Piece {
     private final static int[] POSSIBLE_MOVE_COORDINATES = { -17, -15, -10, -6, 6, 10, 15, 17 };
@@ -17,7 +17,7 @@ public class Knight extends Piece {
     }
 
     @Override
-    public Collection<Move> CalculateLegalMoves(Board board) {
+    public Collection<Move> CalculateLegalMoves(final Board board) {
 
         final Collection<Move> legalMoves = new ArrayList<>();
         for (final int currentCoordinate : POSSIBLE_MOVE_COORDINATES) {
@@ -33,10 +33,13 @@ public class Knight extends Piece {
                 }
 
                 if (!destinationCoordinateSquare.isSquareOccupied()) {
-                    legalMoves.add(new Move());
+                    legalMoves.add(new MajorMove(board, this, destinationCoordinate));
                 } else {
                     final Piece pieceAtposition = destinationCoordinateSquare.getPiece();
                     final Color pieceColor = pieceAtposition.getColor();
+                    if (this.pieceColor != pieceColor) {
+                        legalMoves.add(new AttackMove(board, this, destinationCoordinate, pieceAtposition));
+                    }
                 }
             }
         }

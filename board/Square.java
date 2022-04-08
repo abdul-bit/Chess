@@ -3,7 +3,6 @@ package board;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-
 import pieces.Piece;
 
 public abstract class Square {
@@ -13,7 +12,7 @@ public abstract class Square {
 
     private static Map<Integer, EmptySquare> createSquares() {
         final Map<Integer, EmptySquare> emptySquareMap = new HashMap<>();
-        for (int i = 0; i < 64; i++) {
+        for (int i = 0; i < BoardUtils.NUM_TILES; i++) {
             emptySquareMap.put(i, new EmptySquare(i));
         }
 
