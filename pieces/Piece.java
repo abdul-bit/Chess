@@ -4,6 +4,7 @@ import board.Move;
 import board.Board;
 import board.Square;
 
+import java.util.Collection;
 import java.util.List;
 
 public abstract class Piece {
@@ -15,6 +16,10 @@ public abstract class Piece {
         this.piecePosition = piecePosition;
     }
 
-    public abstract List<Move> legalMoves(final Board board);
+    public abstract Collection<Move> CalculateLegalMoves(final Board board);
+
+    public Color getColor() {
+        return this.pieceColor;
+    }
 
 }
