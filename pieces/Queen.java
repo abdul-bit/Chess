@@ -11,10 +11,10 @@ import java.util.ArrayList;
 import board.BoardUtils;
 import board.Move.*;
 
-public class Bishop extends Piece {
-    private final static int[] POSSIBLE_MOVE_COORDINATES = { -9, -7, 7, 9 };
+public class Queen extends Piece {
+    private final static int[] POSSIBLE_MOVE_COORDINATES = { -9, -8, -7, -1, 1, 7, 8, 9 };
 
-    Bishop(final int piecePosition, final Color pieceColor) {
+    Queen(final int piecePosition, final Color pieceColor) {
         super(piecePosition, pieceColor);
     }
 
@@ -55,13 +55,12 @@ public class Bishop extends Piece {
     private static boolean isFirstColumn(final int currentCandidate,
             final int candidateDestinationCoordinate) {
         return (BoardUtils.FIRST_COLUMN[candidateDestinationCoordinate] &&
-                ((currentCandidate == -9) || (currentCandidate == 7)));
+                ((currentCandidate == -1) || (currentCandidate == -9) || (currentCandidate == 7)));
     }
 
     private static boolean isEighthColumn(final int currentCandidate,
             final int candidateDestinationCoordinate) {
         return BoardUtils.EIGHTH_COLUMN[candidateDestinationCoordinate] &&
-                ((currentCandidate == -7) || (currentCandidate == 9));
+                ((currentCandidate == 1) || (currentCandidate == -7) || (currentCandidate == 9));
     }
-
 }

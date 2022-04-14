@@ -1,10 +1,9 @@
 package pieces;
 
-import board.Move;
-import board.Board;
-import board.Square;
 import java.util.Collection;
-import java.util.List;
+
+import board.Board;
+import board.Move;
 
 public abstract class Piece {
     protected final int piecePosition;
