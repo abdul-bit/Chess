@@ -2,35 +2,37 @@ package pieces;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
+
 import board.Board;
 import board.Move;
 import board.Square;
+
 import java.util.ArrayList;
 import board.BoardUtils;
 import board.Move.*;
-import java.util.List;
 
-public class Knight extends Piece {
-    private final static int[] POSSIBLE_MOVE_COORDINATES = { -17, -15, -10, -6, 6, 10, 15, 17 };
+// the most integral piece in chess
 
-    Knight(final int piecePosition, final Color pieceColor) {
+public class King extends Piece {
+    private final static int[] POSSIBLE_MOVE_COORDINATES = { -9, -8, -7, -1, 1, 7, 8, 9 };
+
+    public King(final Color pieceColor, final int piecePosition) {
         super(piecePosition, pieceColor);
     }
 
     @Override
     public Collection<Move> CalculateLegalMoves(final Board board) {
-
         final List<Move> legalMoves = new ArrayList<>();
         for (final int currentCoordinate : POSSIBLE_MOVE_COORDINATES) {
             final int destinationCoordinate = this.piecePosition + currentCoordinate;
 
+            if (isFirstcolumn(this.piecePosition, currentCoordinate)
+                    || isEighthcolumn(this.piecePosition, currentCoordinate)) {
+                continue;
+            }
+
             if (BoardUtils.isValidSquareCoordinate(destinationCoordinate)) {
-                if (isFirstcolumn(this.piecePosition, currentCoordinate) ||
-                        isSecondcolumn(this.piecePosition, currentCoordinate) ||
-                        isSeventhcolumn(this.piecePosition, currentCoordinate) ||
-                        isEighthcolumn(this.piecePosition, currentCoordinate)) {
-                    continue;
-                }
                 final Square destinationCoordinateSquare = board.getSquare(destinationCoordinate);
                 if (!destinationCoordinateSquare.isSquareOccupied()) {
                     legalMoves.add(new MajorMove(board, this, destinationCoordinate));
@@ -43,28 +45,18 @@ public class Knight extends Piece {
                 }
             }
         }
-        return Collections.unmodifiableCollection(legalMoves);
 
+        return Collections.unmodifiableList(legalMoves);
     }
 
     private static boolean isFirstcolumn(final int currentPosition, final int offset) {
         return BoardUtils.FIRST_COLUMN[currentPosition]
-                && ((offset == -17 || offset == -10 || offset == 6 || offset == 15));
-    }
-
-    private static boolean isSecondcolumn(final int currentPosition, final int offset) {
-        return BoardUtils.SECOND_COLUMN[currentPosition]
-                && (offset == -10 || offset == 6);
-    }
-
-    private static boolean isSeventhcolumn(final int currentPosition, final int offset) {
-        return BoardUtils.SEVENTH_COLUMN[currentPosition]
-                && (offset == 6 || offset == 10);
+                && ((offset == -9 || offset == -1 || offset == 7));
     }
 
     private static boolean isEighthcolumn(final int currentPosition, final int offset) {
         return BoardUtils.EIGHTH_COLUMN[currentPosition]
-                && ((offset == 17 || offset == 10 || offset == -6 || offset == -15));
+                && ((offset == -7 || offset == 1 || offset == 9));
     }
 
 }
