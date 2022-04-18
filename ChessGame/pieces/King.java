@@ -1,16 +1,16 @@
-package pieces;
+package ChessGame.pieces;
 
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import board.Board;
-import board.Move;
-import board.Square;
+import ChessGame.board.Board;
+import ChessGame.board.BoardUtils;
+import ChessGame.board.Move;
+import ChessGame.board.Square;
+import ChessGame.board.Move.*;
 
 import java.util.ArrayList;
-import board.BoardUtils;
-import board.Move.*;
 
 // the most integral piece in chess
 
@@ -59,4 +59,8 @@ public class King extends Piece {
                 && ((offset == -7 || offset == 1 || offset == 9));
     }
 
+    @Override
+    public String toString() {
+        return PieceType.KING.toString();
+    }
 }

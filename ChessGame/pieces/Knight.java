@@ -1,19 +1,20 @@
-package pieces;
+package ChessGame.pieces;
 
 import java.util.Collection;
 import java.util.Collections;
-import board.Board;
-import board.Move;
-import board.Square;
 import java.util.ArrayList;
-import board.BoardUtils;
-import board.Move.*;
 import java.util.List;
+
+import ChessGame.board.Board;
+import ChessGame.board.BoardUtils;
+import ChessGame.board.Move;
+import ChessGame.board.Square;
+import ChessGame.board.Move.*;
 
 public class Knight extends Piece {
     private final static int[] POSSIBLE_MOVE_COORDINATES = { -17, -15, -10, -6, 6, 10, 15, 17 };
 
-    Knight(final int piecePosition, final Color pieceColor) {
+    public Knight(final Color pieceColor, final int piecePosition) {
         super(piecePosition, pieceColor);
     }
 
@@ -65,6 +66,11 @@ public class Knight extends Piece {
     private static boolean isEighthcolumn(final int currentPosition, final int offset) {
         return BoardUtils.EIGHTH_COLUMN[currentPosition]
                 && ((offset == 17 || offset == 10 || offset == -6 || offset == -15));
+    }
+
+    @Override
+    public String toString() {
+        return PieceType.KNIGHT.toString();
     }
 
 }

@@ -1,26 +1,27 @@
-package pieces;
+package ChessGame.pieces;
 
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import board.Board;
-import board.Move;
-import board.Square;
+import ChessGame.board.Board;
+import ChessGame.board.BoardUtils;
+import ChessGame.board.Move;
+import ChessGame.board.Square;
+import ChessGame.board.Move.*;
+
 import java.util.ArrayList;
-import board.BoardUtils;
-import board.Move.*;
 
-public class Bishop extends Piece {
-    private final static int[] POSSIBLE_MOVE_COORDINATES = { -9, -7, 7, 9 };
+public final class Rook extends Piece {
 
-    Bishop(final int piecePosition, final Color pieceColor) {
+    private final static int[] POSSIBLE_MOVE_COORDINATES = { -8, -1, 1, 8 };
+
+    public Rook(final Color pieceColor, final int piecePosition) {
         super(piecePosition, pieceColor);
     }
 
     @Override
     public Collection<Move> CalculateLegalMoves(final Board board) {
-
         final List<Move> legalMoves = new ArrayList<>();
         for (final int currentCoordinate : POSSIBLE_MOVE_COORDINATES) {
             int destinationCoordinate = this.piecePosition;
@@ -55,13 +56,17 @@ public class Bishop extends Piece {
     private static boolean isFirstColumn(final int currentCandidate,
             final int candidateDestinationCoordinate) {
         return (BoardUtils.FIRST_COLUMN[candidateDestinationCoordinate] &&
-                ((currentCandidate == -9) || (currentCandidate == 7)));
+                (currentCandidate == -1));
     }
 
     private static boolean isEighthColumn(final int currentCandidate,
             final int candidateDestinationCoordinate) {
-        return BoardUtils.EIGHTH_COLUMN[candidateDestinationCoordinate] &&
-                ((currentCandidate == -7) || (currentCandidate == 9));
+        return (BoardUtils.EIGHTH_COLUMN[candidateDestinationCoordinate] &&
+                (currentCandidate == 1));
     }
 
+    @Override
+    public String toString() {
+        return PieceType.ROOK.toString();
+    }
 }

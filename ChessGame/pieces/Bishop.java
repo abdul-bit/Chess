@@ -1,20 +1,21 @@
-package pieces;
+package ChessGame.pieces;
 
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import board.Board;
-import board.Move;
-import board.Square;
+import ChessGame.board.Board;
+import ChessGame.board.BoardUtils;
+import ChessGame.board.Move;
+import ChessGame.board.Square;
+import ChessGame.board.Move.*;
+
 import java.util.ArrayList;
-import board.BoardUtils;
-import board.Move.*;
 
-public class Queen extends Piece {
-    private final static int[] POSSIBLE_MOVE_COORDINATES = { -9, -8, -7, -1, 1, 7, 8, 9 };
+public class Bishop extends Piece {
+    private final static int[] POSSIBLE_MOVE_COORDINATES = { -9, -7, 7, 9 };
 
-    Queen(final int piecePosition, final Color pieceColor) {
+    public Bishop(final Color pieceColor, final int piecePosition) {
         super(piecePosition, pieceColor);
     }
 
@@ -55,12 +56,18 @@ public class Queen extends Piece {
     private static boolean isFirstColumn(final int currentCandidate,
             final int candidateDestinationCoordinate) {
         return (BoardUtils.FIRST_COLUMN[candidateDestinationCoordinate] &&
-                ((currentCandidate == -1) || (currentCandidate == -9) || (currentCandidate == 7)));
+                ((currentCandidate == -9) || (currentCandidate == 7)));
     }
 
     private static boolean isEighthColumn(final int currentCandidate,
             final int candidateDestinationCoordinate) {
         return BoardUtils.EIGHTH_COLUMN[candidateDestinationCoordinate] &&
-                ((currentCandidate == 1) || (currentCandidate == -7) || (currentCandidate == 9));
+                ((currentCandidate == -7) || (currentCandidate == 9));
     }
+
+    @Override
+    public String toString() {
+        return PieceType.BISHOP.toString();
+    }
+
 }

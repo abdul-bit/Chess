@@ -1,9 +1,10 @@
-package board;
+package ChessGame.board;
 
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import pieces.Piece;
+
+import ChessGame.pieces.Piece;
 
 public abstract class Square {
     protected final int squareCoordinate; // to prevent mutation from any of the players who are using the api
@@ -12,7 +13,7 @@ public abstract class Square {
 
     private static Map<Integer, EmptySquare> createSquares() {
         final Map<Integer, EmptySquare> emptySquareMap = new HashMap<>();
-        for (int i = 0; i < BoardUtils.NUM_TILES; i++) {
+        for (int i = 0; i < BoardUtils.NUM_SQUARES; i++) {
             emptySquareMap.put(i, new EmptySquare(i));
         }
 
@@ -39,6 +40,11 @@ public abstract class Square {
         }
 
         @Override
+        public String toString() {
+            return "-";
+        }
+
+        @Override
         public boolean isSquareOccupied() {
             return false;
         }
@@ -55,6 +61,11 @@ public abstract class Square {
         private OccupiedSquare(final int coordinate, Piece pieceOnSquare) {
             super(coordinate);
             this.pieceOnSquare = pieceOnSquare;
+        }
+
+        @Override
+        public String toString() {
+            return getPiece().getColor().isBlack() ? getPiece().toString().toLowerCase() : getPiece().toString();
         }
 
         @Override

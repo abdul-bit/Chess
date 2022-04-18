@@ -1,14 +1,15 @@
-package pieces;
+package ChessGame.pieces;
 
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import board.Board;
-import board.Move;
+import ChessGame.board.Board;
+import ChessGame.board.BoardUtils;
+import ChessGame.board.Move;
+import ChessGame.board.Move.*;
+
 import java.util.ArrayList;
-import board.BoardUtils;
-import board.Move.*;
 
 public class Pawn extends Piece {
     private final static int[] POSSIBLE_MOVE_COORDINATES = { 8, 16, 7, 9 };
@@ -65,4 +66,8 @@ public class Pawn extends Piece {
         return Collections.unmodifiableList(legalMoves);
     }
 
+    @Override
+    public String toString() {
+        return PieceType.PAWN.toString();
+    }
 }
