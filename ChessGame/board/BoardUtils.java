@@ -1,4 +1,4 @@
-package ChessGame.board;
+package ChessGame.Board;
 
 public class BoardUtils {
 

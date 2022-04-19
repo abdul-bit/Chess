@@ -1,4 +1,4 @@
-package ChessGame.board;
+package ChessGame.Board;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -10,28 +10,37 @@ import java.util.Map;
 
 import com.google.common.collect.ImmutableList;
 
-import ChessGame.pieces.Bishop;
-import ChessGame.pieces.Color;
-import ChessGame.pieces.King;
-import ChessGame.pieces.Knight;
-import ChessGame.pieces.Pawn;
-import ChessGame.pieces.Piece;
-import ChessGame.pieces.Queen;
-import ChessGame.pieces.Rook;
+import ChessGame.Pieces.Bishop;
+import ChessGame.Pieces.Color;
+import ChessGame.Pieces.King;
+import ChessGame.Pieces.Knight;
+import ChessGame.Pieces.Pawn;
+import ChessGame.Pieces.Piece;
+import ChessGame.Pieces.Queen;
+import ChessGame.Pieces.Rook;
+import ChessGame.Player.BlackPlayer;
+import ChessGame.Player.Player;
+import ChessGame.Player.WhitePlayer;
 
 public class Board {
 
     private final List<Square> gameBoard;
     private final Collection<Piece> whitePieces;
     private final Collection<Piece> blackPieces;
+    private final WhitePlayer whitePlayer;
+    private final BlackPlayer blackPlayer;
+    private final Player currentPlayer;
 
-    private Board(Builder builder) {
+    private Board(final Builder builder) {
         this.gameBoard = createGameBoard(builder);
         this.whitePieces = calculateActivePieces(this.gameBoard, Color.WHITE);
         this.blackPieces = calculateActivePieces(this.gameBoard, Color.BLACK);
 
         final Collection<Move> whiteStandardLegaMoves = calculateLegalMoves(this.whitePieces);
         final Collection<Move> blackStandardLegaMoves = calculateLegalMoves(this.blackPieces);
+        this.whitePlayer = new WhitePlayer(this, whiteStandardLegaMoves, blackStandardLegaMoves);
+        this.blackPlayer = new BlackPlayer(this, whiteStandardLegaMoves, blackStandardLegaMoves);
+        this.currentPlayer = builder.nextMoveMaker.choosePlayer(this.blackPlayer, this.whitePlayer);
     }
 
     @Override
@@ -150,6 +159,26 @@ public class Board {
 
         }
 
+    }
+
+    public Collection<Piece> getBlackPieces() {
+        return this.blackPieces;
+    }
+
+    public Collection<Piece> getWhitePieces() {
+        return this.whitePieces;
+    }
+
+    public Player blackPlayer() {
+        return this.blackPlayer;
+    }
+
+    public Player whitePlayer() {
+        return this.whitePlayer;
+    }
+
+    public Player currentPlayer() {
+        return this.currentPlayer;
     }
 
 }

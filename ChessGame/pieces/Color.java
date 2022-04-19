@@ -1,4 +1,8 @@
-package ChessGame.pieces;
+package ChessGame.Pieces;
+
+import ChessGame.Player.BlackPlayer;
+import ChessGame.Player.Player;
+import ChessGame.Player.WhitePlayer;
 
 public enum Color {
     WHITE {
@@ -18,6 +22,11 @@ public enum Color {
             return false;
         }
 
+        @Override
+        public Player choosePlayer(BlackPlayer blackPlayer, WhitePlayer whitePlayer) {
+            return whitePlayer;
+        }
+
     },
     BLACK {
         @Override
@@ -34,6 +43,12 @@ public enum Color {
         public boolean isBlack() {
             return true;
         }
+
+        @Override
+        public Player choosePlayer(final BlackPlayer blackPlayer,
+                final WhitePlayer whitePlayer) {
+            return blackPlayer;// polymorphic trick
+        }
     };
 
     public abstract int getDirection();
@@ -41,4 +56,6 @@ public enum Color {
     public abstract boolean isWhite();
 
     public abstract boolean isBlack();
+
+    public abstract Player choosePlayer(BlackPlayer blackPlayer, WhitePlayer whitePlayer);
 }

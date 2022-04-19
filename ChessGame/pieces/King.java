@@ -1,14 +1,14 @@
-package ChessGame.pieces;
+package ChessGame.Pieces;
 
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import ChessGame.board.Board;
-import ChessGame.board.BoardUtils;
-import ChessGame.board.Move;
-import ChessGame.board.Square;
-import ChessGame.board.Move.*;
+import ChessGame.Board.Board;
+import ChessGame.Board.BoardUtils;
+import ChessGame.Board.Move;
+import ChessGame.Board.Square;
+import ChessGame.Board.Move.*;
 
 import java.util.ArrayList;
 
@@ -18,7 +18,7 @@ public class King extends Piece {
     private final static int[] POSSIBLE_MOVE_COORDINATES = { -9, -8, -7, -1, 1, 7, 8, 9 };
 
     public King(final Color pieceColor, final int piecePosition) {
-        super(piecePosition, pieceColor);
+        super(PieceType.KING, piecePosition, pieceColor);
     }
 
     @Override

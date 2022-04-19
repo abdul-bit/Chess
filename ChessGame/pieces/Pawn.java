@@ -1,13 +1,13 @@
-package ChessGame.pieces;
+package ChessGame.Pieces;
 
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import ChessGame.board.Board;
-import ChessGame.board.BoardUtils;
-import ChessGame.board.Move;
-import ChessGame.board.Move.*;
+import ChessGame.Board.Board;
+import ChessGame.Board.BoardUtils;
+import ChessGame.Board.Move;
+import ChessGame.Board.Move.*;
 
 import java.util.ArrayList;
 
@@ -15,7 +15,7 @@ public class Pawn extends Piece {
     private final static int[] POSSIBLE_MOVE_COORDINATES = { 8, 16, 7, 9 };
 
     public Pawn(final Color pieceColor, final int piecePosition) {
-        super(piecePosition, pieceColor);
+        super(PieceType.PAWN, piecePosition, pieceColor);
     }
 
     @Override

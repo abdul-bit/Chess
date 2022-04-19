@@ -1,21 +1,21 @@
-package ChessGame.pieces;
+package ChessGame.Pieces;
 
 import java.util.Collection;
 import java.util.Collections;
 import java.util.ArrayList;
 import java.util.List;
 
-import ChessGame.board.Board;
-import ChessGame.board.BoardUtils;
-import ChessGame.board.Move;
-import ChessGame.board.Square;
-import ChessGame.board.Move.*;
+import ChessGame.Board.Board;
+import ChessGame.Board.BoardUtils;
+import ChessGame.Board.Move;
+import ChessGame.Board.Square;
+import ChessGame.Board.Move.*;
 
 public class Knight extends Piece {
     private final static int[] POSSIBLE_MOVE_COORDINATES = { -17, -15, -10, -6, 6, 10, 15, 17 };
 
     public Knight(final Color pieceColor, final int piecePosition) {
-        super(piecePosition, pieceColor);
+        super(PieceType.KNIGHT, piecePosition, pieceColor);
     }
 
     @Override

@@ -1,14 +1,14 @@
-package ChessGame.pieces;
+package ChessGame.Pieces;
 
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import ChessGame.board.Board;
-import ChessGame.board.BoardUtils;
-import ChessGame.board.Move;
-import ChessGame.board.Square;
-import ChessGame.board.Move.*;
+import ChessGame.Board.Board;
+import ChessGame.Board.BoardUtils;
+import ChessGame.Board.Move;
+import ChessGame.Board.Square;
+import ChessGame.Board.Move.*;
 
 import java.util.ArrayList;
 
@@ -17,7 +17,7 @@ public final class Rook extends Piece {
     private final static int[] POSSIBLE_MOVE_COORDINATES = { -8, -1, 1, 8 };
 
     public Rook(final Color pieceColor, final int piecePosition) {
-        super(piecePosition, pieceColor);
+        super(PieceType.ROOK, piecePosition, pieceColor);
     }
 
     @Override

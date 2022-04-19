@@ -1,10 +1,10 @@
-package ChessGame.board;
+package ChessGame.Board;
 
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import ChessGame.pieces.Piece;
+import ChessGame.Pieces.Piece;
 
 public abstract class Square {
     protected final int squareCoordinate; // to prevent mutation from any of the players who are using the api
@@ -65,7 +65,7 @@ public abstract class Square {
 
         @Override
         public String toString() {
-            return getPiece().getColor().isBlack() ? getPiece().toString().toLowerCase() : getPiece().toString();
+            return getPiece().getColor().isBlack() ? "B_" + getPiece().toString() : "W_" + getPiece().toString();
         }
 
         @Override
