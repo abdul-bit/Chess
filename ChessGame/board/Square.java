@@ -79,4 +79,8 @@ public abstract class Square {
             return pieceOnSquare;
         }
     }
+
+    public int getSquareCoordinate() {
+        return this.squareCoordinate;
+    }
 }

@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterables;
 
 import ChessGame.Pieces.Bishop;
 import ChessGame.Pieces.Color;
@@ -138,6 +139,7 @@ public class Board {
     public static class Builder {
         private final Map<Integer, Piece> boardConfig;
         Color nextMoveMaker;
+        Pawn EnPassantPawn;
 
         public Builder() {
             this.boardConfig = new HashMap<>();
@@ -156,6 +158,11 @@ public class Board {
 
         public Board build() {
             return new Board(this);
+
+        }
+
+        public void setEnPassant(Pawn EnPassantPawn) {
+            this.EnPassantPawn = EnPassantPawn;
 
         }
 
@@ -179,6 +186,11 @@ public class Board {
 
     public Player currentPlayer() {
         return this.currentPlayer;
+    }
+
+    public Iterable<Move> getAllLegalMoves() {
+        return Iterables.unmodifiableIterable(
+                Iterables.concat(this.whitePlayer.getLegalMoves(), this.blackPlayer.getLegalMoves()));
     }
 
 }

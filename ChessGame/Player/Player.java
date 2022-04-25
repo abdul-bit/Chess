@@ -29,7 +29,7 @@ public abstract class Player {
         this.isInCheck = !Player.calculateAttacksOnSquare(this.playerKing.getPiecePosition(), opponentMoves).isEmpty();
     }
 
-    private static Collection<Move> calculateAttacksOnSquare(int piecePosition, Collection<Move> Moves) {
+    protected static Collection<Move> calculateAttacksOnSquare(int piecePosition, Collection<Move> Moves) {
         final List<Move> attackMoves = new ArrayList<>();
         for (final Move move : Moves) {
             if (piecePosition == move.getDestinationCoordinate()) {
@@ -97,7 +97,7 @@ public abstract class Player {
 
     }
 
-    private Collection<Move> getLegalMoves() {
+    public Collection<Move> getLegalMoves() {
         return legalMoves;
     }
 
@@ -110,4 +110,7 @@ public abstract class Player {
     public abstract Color getColor();
 
     public abstract Player getOpponent();
+
+    protected abstract Collection<Move> calculateKingCastles(Collection<Move> playerLegals,
+            Collection<Move> opponentLegals);
 }

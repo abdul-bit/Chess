@@ -69,4 +69,9 @@ public final class Rook extends Piece {
     public String toString() {
         return PieceType.ROOK.toString();
     }
+
+    @Override
+    public Rook movePiece(final Move move) {
+        return new Rook(move.getMovedPiece().getColor(), move.getDestinationCoordinate());
+    }
 }
