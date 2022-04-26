@@ -1,6 +1,7 @@
 {
     "java.project.referencedLibraries": [
         "lib/**/*.jar",
-        "c:\\Users\\Abdul\\OneDrive\\Desktop\\guava-18.0.jar"
+        "c:\\Users\\Abdul\\OneDrive\\Desktop\\guava-18.0.jar",
+        "c:\\Users\\Abdul\\OneDrive\\Desktop\\chess-bw\\BlackWidow-Chess\\lib\\guava-18.0.jar"
     ]
 }

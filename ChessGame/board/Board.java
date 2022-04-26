@@ -34,12 +34,11 @@ public class Board {
         this.gameBoard = createGameBoard(builder);
         this.whitePieces = calculateActivePieces(this.gameBoard, Color.WHITE);
         this.blackPieces = calculateActivePieces(this.gameBoard, Color.BLACK);
-
-        final Collection<Move> whiteStandardLegaMoves = calculateLegalMoves(this.whitePieces);
-        final Collection<Move> blackStandardLegaMoves = calculateLegalMoves(this.blackPieces);
-        this.whitePlayer = new WhitePlayer(this, whiteStandardLegaMoves, blackStandardLegaMoves);
-        this.blackPlayer = new BlackPlayer(this, whiteStandardLegaMoves, blackStandardLegaMoves);
-        this.currentPlayer = builder.nextMoveMaker.choosePlayer(this.blackPlayer, this.whitePlayer);
+        final Collection<Move> whiteStandardLegalMoves = calculateLegalMoves(this.whitePieces);
+        final Collection<Move> blackStandardLegalMoves = calculateLegalMoves(this.blackPieces);
+        this.whitePlayer = new WhitePlayer(this, whiteStandardLegalMoves, blackStandardLegalMoves);
+        this.blackPlayer = new BlackPlayer(this, whiteStandardLegalMoves, blackStandardLegalMoves);
+        this.currentPlayer = builder.nextMoveMaker.choosePlayer(this.whitePlayer, this.blackPlayer);
     }
 
     @Override
@@ -51,7 +50,6 @@ public class Board {
             if ((i + 1) % BoardUtils.NUM_SQUARES_PER_ROW == 0) {
                 builder.append("\n");
             }
-
         }
         return builder.toString();
     }
@@ -79,23 +77,23 @@ public class Board {
     private Collection<Move> calculateLegalMoves(final Collection<Piece> pieces) {
         final List<Move> legalMoves = new ArrayList<>();
         for (final Piece piece : pieces) {
-            legalMoves.addAll(piece.CalculateLegalMoves(this));
+            legalMoves.addAll(piece.calculateLegalMoves(this));
         }
         return ImmutableList.copyOf(legalMoves);
     }
 
-    private static Collection<Piece> calculateActivePieces(List<Square> gameBoard, Color color) {
-
+    private static Collection<Piece> calculateActivePieces(final List<Square> gameBoard,
+            final Color Color) {
         final List<Piece> activePieces = new ArrayList<>();
+
         for (final Square square : gameBoard) {
             if (square.isSquareOccupied()) {
                 final Piece piece = square.getPiece();
-                if (piece.getColor() == color) {
+                if (piece.getPieceColor() == Color) {
                     activePieces.add(piece);
                 }
             }
         }
-
         return ImmutableList.copyOf(activePieces);
     }
 
@@ -107,14 +105,13 @@ public class Board {
         final Square[] squares = new Square[BoardUtils.NUM_SQUARES];
         for (int i = 0; i < BoardUtils.NUM_SQUARES; i++) {
             squares[i] = Square.createSquare(i, builder.boardConfig.get(i));
-
         }
         return ImmutableList.copyOf(squares);
     }
 
-    public static Board createStandBoard() {
+    public static Board createStandardBoard() {
         final Builder builder = new Builder();
-        // Black Layout
+        // Black Piece Layout
         builder.setPiece(new Rook(Color.BLACK, 0));
         builder.setPiece(new Knight(Color.BLACK, 1));
         builder.setPiece(new Bishop(Color.BLACK, 2));
@@ -131,7 +128,7 @@ public class Board {
         builder.setPiece(new Pawn(Color.BLACK, 13));
         builder.setPiece(new Pawn(Color.BLACK, 14));
         builder.setPiece(new Pawn(Color.BLACK, 15));
-        // White Layout
+        // White Piece Layout
         builder.setPiece(new Pawn(Color.WHITE, 48));
         builder.setPiece(new Pawn(Color.WHITE, 49));
         builder.setPiece(new Pawn(Color.WHITE, 50));
@@ -148,9 +145,9 @@ public class Board {
         builder.setPiece(new Bishop(Color.WHITE, 61));
         builder.setPiece(new Knight(Color.WHITE, 62));
         builder.setPiece(new Rook(Color.WHITE, 63));
-        // white to move
+        // white moves on first turn
         builder.setMoveMaker(Color.WHITE);
-        // build the board
+
         return builder.build();
     }
 
@@ -160,13 +157,13 @@ public class Board {
     }
 
     public static class Builder {
+
         Map<Integer, Piece> boardConfig;
         Color nextMoveMaker;
-        Pawn EnPassantPawn;
+        Pawn enPassantPawn;
 
         public Builder() {
             this.boardConfig = new HashMap<>();
-
         }
 
         public Builder setPiece(final Piece piece) {
@@ -181,14 +178,10 @@ public class Board {
 
         public Board build() {
             return new Board(this);
-
         }
 
-        public void setEnPassant(Pawn EnPassantPawn) {
-            this.EnPassantPawn = EnPassantPawn;
-
+        public void setEnPassantPawn(Pawn enPassantPawn) {
+            this.enPassantPawn = enPassantPawn;
         }
-
     }
-
 }

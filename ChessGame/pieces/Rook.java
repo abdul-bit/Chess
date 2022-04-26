@@ -14,57 +14,54 @@ import ChessGame.board.Move.*;
 
 import java.util.ArrayList;
 
-public final class Rook extends Piece {
+public class Rook extends Piece {
 
-    private final static int[] POSSIBLE_MOVE_COORDINATES = { -8, -1, 1, 8 };
+    private final static int[] CANDIDATE_MOVE_VECTOR_COORDINATES = { -8, -1, 1, 8 };
 
     public Rook(final Color pieceColor, final int piecePosition) {
-        super(PieceType.ROOK, piecePosition, pieceColor);
+        super(PieceType.ROOK, piecePosition, pieceColor, true);
+    }
+
+    public Rook(final Color pieceColor, final int piecePosition, final boolean isFirstMove) {
+        super(PieceType.ROOK, piecePosition, pieceColor, isFirstMove);
     }
 
     @Override
-    public Collection<Move> CalculateLegalMoves(final Board board) {
+    public Collection<Move> calculateLegalMoves(final Board board) {
+
         final List<Move> legalMoves = new ArrayList<>();
-        for (final int currentCoordinate : POSSIBLE_MOVE_COORDINATES) {
-            int destinationCoordinate = this.piecePosition;
-            while (BoardUtils.isValidSquareCoordinate((destinationCoordinate))) {
-                if (isFirstColumn(currentCoordinate, destinationCoordinate) ||
-                        isEighthColumn(currentCoordinate, destinationCoordinate)) {
+
+        for (final int candidateCoordinateOffset : CANDIDATE_MOVE_VECTOR_COORDINATES) {
+            int candidateDestinationCoordinate = this.piecePosition;
+            while (BoardUtils.isValidSquareCoordinate(candidateDestinationCoordinate)) {
+                if (isFirstColumnExclusion(candidateDestinationCoordinate, candidateCoordinateOffset) ||
+                        isEighthColumnExclusion(candidateDestinationCoordinate, candidateCoordinateOffset)) {
                     break;
                 }
-                destinationCoordinate += currentCoordinate;
-                if (BoardUtils.isValidSquareCoordinate((destinationCoordinate))) {
-
-                    final Square destinationCoordinateSquare = board.getSquare(destinationCoordinate);
-                    if (!destinationCoordinateSquare.isSquareOccupied()) {
-                        legalMoves.add(new MajorMove(board, this, destinationCoordinate));
+                candidateDestinationCoordinate += candidateCoordinateOffset;
+                if (BoardUtils.isValidSquareCoordinate(candidateDestinationCoordinate)) {
+                    final Square candidateDestinationSquare = board.getSquare(candidateDestinationCoordinate);
+                    if (!candidateDestinationSquare.isSquareOccupied()) {
+                        legalMoves.add(new MajorMove(board, this, candidateDestinationCoordinate));
                     } else {
-                        final Piece pieceAtposition = destinationCoordinateSquare.getPiece();
-                        final Color pieceColor = pieceAtposition.getColor();
+                        final Piece pieceAtDestination = candidateDestinationSquare.getPiece();
+                        final Color pieceColor = pieceAtDestination.getPieceColor();
                         if (this.pieceColor != pieceColor) {
-                            legalMoves.add(new AttackMove(board, this, destinationCoordinate, pieceAtposition));
+                            legalMoves.add(
+                                    new AttackMove(board, this, candidateDestinationCoordinate, pieceAtDestination));
                         }
                         break;
                     }
-
                 }
-
             }
-
         }
+
         return ImmutableList.copyOf(legalMoves);
     }
 
-    private static boolean isFirstColumn(final int currentCandidate,
-            final int candidateDestinationCoordinate) {
-        return (BoardUtils.FIRST_COLUMN[candidateDestinationCoordinate] &&
-                (currentCandidate == -1));
-    }
-
-    private static boolean isEighthColumn(final int currentCandidate,
-            final int candidateDestinationCoordinate) {
-        return (BoardUtils.EIGHTH_COLUMN[candidateDestinationCoordinate] &&
-                (currentCandidate == 1));
+    @Override
+    public Rook movePiece(final Move move) {
+        return new Rook(move.getMovedPiece().getPieceColor(), move.getDestinationCoordinate());
     }
 
     @Override
@@ -72,8 +69,11 @@ public final class Rook extends Piece {
         return PieceType.ROOK.toString();
     }
 
-    @Override
-    public Rook movePiece(final Move move) {
-        return new Rook(move.getMovedPiece().getColor(), move.getDestinationCoordinate());
+    private static boolean isFirstColumnExclusion(final int currentPosition, final int candidateOffset) {
+        return BoardUtils.FIRST_COLUMN[currentPosition] && (candidateOffset == -1);
+    }
+
+    private static boolean isEighthColumnExclusion(final int currentPosition, final int candidateOffset) {
+        return BoardUtils.EIGHTH_COLUMN[currentPosition] && (candidateOffset == 1);
     }
 }

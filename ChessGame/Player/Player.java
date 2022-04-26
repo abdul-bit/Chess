@@ -15,6 +15,7 @@ import ChessGame.board.Board;
 import ChessGame.board.Move;
 
 public abstract class Player {
+
     protected final Board board;
     protected final King playerKing;
     protected final Collection<Move> legalMoves;
@@ -23,6 +24,7 @@ public abstract class Player {
     Player(final Board board,
             final Collection<Move> legalMoves,
             final Collection<Move> opponentMoves) {
+
         this.board = board;
         this.playerKing = establishKing();
         this.legalMoves = ImmutableList
@@ -30,9 +32,17 @@ public abstract class Player {
         this.isInCheck = !Player.calculateAttacksOnSquare(this.playerKing.getPiecePosition(), opponentMoves).isEmpty();
     }
 
-    protected static Collection<Move> calculateAttacksOnSquare(int piecePosition, Collection<Move> Moves) {
+    public King getPlayerKing() {
+        return this.playerKing;
+    }
+
+    public Collection<Move> getLegalMoves() {
+        return this.legalMoves;
+    }
+
+    protected static Collection<Move> calculateAttacksOnSquare(int piecePosition, Collection<Move> moves) {
         final List<Move> attackMoves = new ArrayList<>();
-        for (final Move move : Moves) {
+        for (final Move move : moves) {
             if (piecePosition == move.getDestinationCoordinate()) {
                 attackMoves.add(move);
             }
@@ -46,7 +56,8 @@ public abstract class Player {
                 return (King) piece;
             }
         }
-        throw new RuntimeException("Cannot enter here!! not a valid board!!");
+        return null;
+        // throw new RuntimeException("Should not reach here! Not a valid board!!");
     }
 
     public boolean isMoveLegal(final Move move) {
@@ -59,7 +70,10 @@ public abstract class Player {
 
     public boolean isInCheckMate() {
         return this.isInCheck && !hasEscapeMoves();
+    }
 
+    public boolean isInStalemate() {
+        return !this.isInCheck && !hasEscapeMoves();
     }
 
     protected boolean hasEscapeMoves() {
@@ -72,36 +86,26 @@ public abstract class Player {
         return false;
     }
 
-    public boolean isInStaleMate() {
-        return !this.isInCheck && !hasEscapeMoves();
-    }
-
     public boolean isCastled() {
         return false;
     }
 
     public MoveTransition makeMove(final Move move) {
+
         if (!isMoveLegal(move)) {
             return new MoveTransition(this.board, move, MoveStatus.ILLEGAL_MOVE);
         }
+
         final Board transitionBoard = move.execute();
 
         final Collection<Move> kingAttacks = Player.calculateAttacksOnSquare(
                 transitionBoard.currentPlayer().getOpponent().getPlayerKing().getPiecePosition(),
                 transitionBoard.currentPlayer().getLegalMoves());
+
         if (!kingAttacks.isEmpty()) {
             return new MoveTransition(this.board, move, MoveStatus.LEAVES_PLAYER_IN_CHECK);
         }
         return new MoveTransition(transitionBoard, move, MoveStatus.DONE);
-
-    }
-
-    public Collection<Move> getLegalMoves() {
-        return legalMoves;
-    }
-
-    public King getPlayerKing() {
-        return this.playerKing;
     }
 
     public abstract Collection<Piece> getActivePieces();

@@ -14,67 +14,77 @@ import ChessGame.board.Move.*;
 import java.util.ArrayList;
 
 public class Pawn extends Piece {
-    private final static int[] POSSIBLE_MOVE_COORDINATES = { 8, 16, 7, 9 };
+
+    private final static int[] CANDIDATE_MOVE_COORDINATE = { 8, 16, 7, 9 };
 
     public Pawn(final Color pieceColor, final int piecePosition) {
-        super(PieceType.PAWN, piecePosition, pieceColor);
+        super(PieceType.PAWN, piecePosition, pieceColor, true);
+    }
+
+    public Pawn(final Color pieceColor, final int piecePosition, final boolean isFirstMove) {
+        super(PieceType.PAWN, piecePosition, pieceColor, isFirstMove);
     }
 
     @Override
-    public Collection<Move> CalculateLegalMoves(final Board board) {
+    public Collection<Move> calculateLegalMoves(final Board board) {
+
         final List<Move> legalMoves = new ArrayList<>();
-        for (final int currentCoordinate : POSSIBLE_MOVE_COORDINATES) {
-            int destinationCoordinate = this.piecePosition + (this.getColor().getDirection() * currentCoordinate);
 
-            if (!BoardUtils.isValidSquareCoordinate((destinationCoordinate))) {
+        for (final int currentCandidateOffset : CANDIDATE_MOVE_COORDINATE) {
 
+            final int candidateDestinationCoordinate = this.piecePosition
+                    + (this.pieceColor.getDirection() * currentCandidateOffset);
+
+            if (!BoardUtils.isValidSquareCoordinate(candidateDestinationCoordinate)) {
                 continue;
-
             }
-            if (currentCoordinate == 8 && !board.getSquare(destinationCoordinate).isSquareOccupied()) {
-                // todo
-                legalMoves.add(new MajorMove(board, this, destinationCoordinate));
-            } else if (currentCoordinate == 16 && this.isFirstMove()
-                    && (BoardUtils.SECOND_ROW[this.piecePosition] && this.getColor().isBlack())
-                    || (BoardUtils.SEVENTH_ROW[this.piecePosition] && this.getColor().isWhite())) {
-                final int behindDestinationCoordinate = this.piecePosition
-                        + (this.getColor().getDirection() * 8);
-                if (!board.getSquare(behindDestinationCoordinate).isSquareOccupied()
-                        && !board.getSquare(destinationCoordinate).isSquareOccupied()) {
-                    legalMoves.add(new MajorMove(board, this, destinationCoordinate));
-                }
 
-            } else if (currentCoordinate == 7 && !((BoardUtils.EIGHTH_COLUMN[this.piecePosition]
-                    && this.getColor().isWhite())
-                    || (BoardUtils.FIRST_COLUMN[this.piecePosition]
-                            && this.getColor().isBlack()))) {
-                if (board.getSquare(destinationCoordinate).isSquareOccupied()) {
-                    final Piece pieceOnCandidate = board.getSquare(destinationCoordinate).getPiece();
-                    if (this.pieceColor != pieceOnCandidate.getColor()) {
-                        // todo move
-                        legalMoves.add(new MajorMove(board, this, destinationCoordinate));
+            if (currentCandidateOffset == 8 && !board.getSquare(candidateDestinationCoordinate).isSquareOccupied()) {
+                // TODO (promotions)
+                legalMoves.add(new MajorMove(board, this, candidateDestinationCoordinate));
+            } else if (currentCandidateOffset == 16 && this.isFirstMove() &&
+                    ((BoardUtils.SEVENTH_RANK[this.piecePosition] && this.getPieceColor().isBlack()) ||
+                            (BoardUtils.SECOND_RANK[this.piecePosition] && this.getPieceColor().isWhite()))) {
+                final int behindCandidateDestinationCoordinate = this.piecePosition
+                        + (this.pieceColor.getDirection() * 8);
+                if (!board.getSquare(behindCandidateDestinationCoordinate).isSquareOccupied() &&
+                        !board.getSquare(candidateDestinationCoordinate).isSquareOccupied()) {
+                    legalMoves.add(new PawnJump(board, this, candidateDestinationCoordinate));
+                }
+            } else if (currentCandidateOffset == 7 &&
+                    !((BoardUtils.EIGHTH_COLUMN[this.piecePosition] && this.pieceColor.isWhite() ||
+                            (BoardUtils.FIRST_COLUMN[this.piecePosition] && this.pieceColor.isBlack())))) {
+                if (board.getSquare(candidateDestinationCoordinate).isSquareOccupied()) {
+                    final Piece pieceOnCandidate = board.getSquare(candidateDestinationCoordinate).getPiece();
+                    if (this.pieceColor != pieceOnCandidate.getPieceColor()) {
+
+                        legalMoves
+                                .add(new PawnAttackMove(board, this, candidateDestinationCoordinate, pieceOnCandidate));
                     }
                 }
+            } else if (currentCandidateOffset == 9 &&
+                    !((BoardUtils.FIRST_COLUMN[this.piecePosition] && this.pieceColor.isWhite() ||
+                            (BoardUtils.EIGHTH_COLUMN[this.piecePosition] && this.pieceColor.isBlack())))) {
+                if (board.getSquare(candidateDestinationCoordinate).isSquareOccupied()) {
+                    final Piece pieceOnCandidate = board.getSquare(candidateDestinationCoordinate).getPiece();
+                    if (this.pieceColor != pieceOnCandidate.getPieceColor()) {
 
-            } else if (currentCoordinate == 9 && !((BoardUtils.FIRST_COLUMN[this.piecePosition]
-                    && this.getColor().isWhite())
-                    || (BoardUtils.EIGHTH_COLUMN[this.piecePosition]
-                            && this.getColor().isBlack()))) {
-                // todo move
-                legalMoves.add(new MajorMove(board, this, destinationCoordinate));
+                        legalMoves
+                                .add(new PawnAttackMove(board, this, candidateDestinationCoordinate, pieceOnCandidate));
+                    }
+                }
             }
-
         }
         return ImmutableList.copyOf(legalMoves);
     }
 
     @Override
-    public String toString() {
-        return PieceType.PAWN.toString();
+    public Pawn movePiece(final Move move) {
+        return new Pawn(move.getMovedPiece().getPieceColor(), move.getDestinationCoordinate());
     }
 
     @Override
-    public Pawn movePiece(final Move move) {
-        return new Pawn(move.getMovedPiece().getColor(), move.getDestinationCoordinate());
+    public String toString() {
+        return PieceType.PAWN.toString();
     }
 }

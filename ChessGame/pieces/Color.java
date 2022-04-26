@@ -23,7 +23,7 @@ public enum Color {
         }
 
         @Override
-        public Player choosePlayer(BlackPlayer blackPlayer, WhitePlayer whitePlayer) {
+        public Player choosePlayer(WhitePlayer whitePlayer, BlackPlayer blackPlayer) {
             return whitePlayer;
         }
 
@@ -45,8 +45,8 @@ public enum Color {
         }
 
         @Override
-        public Player choosePlayer(final BlackPlayer blackPlayer,
-                final WhitePlayer whitePlayer) {
+        public Player choosePlayer(
+                final WhitePlayer whitePlayer, final BlackPlayer blackPlayer) {
             return blackPlayer;// polymorphic trick
         }
     };
@@ -57,5 +57,5 @@ public enum Color {
 
     public abstract boolean isBlack();
 
-    public abstract Player choosePlayer(BlackPlayer blackPlayer, WhitePlayer whitePlayer);
+    public abstract Player choosePlayer(WhitePlayer whitePlayer, BlackPlayer blackPlayer);
 }

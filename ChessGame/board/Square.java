@@ -9,12 +9,15 @@ import ChessGame.Pieces.Piece;
 
 //we have declared the square class as abstract to prevent its instatiation whereas we can instantiate concrete subclasses
 public abstract class Square {
-    protected final int squareCoordinate; // to prevent mutation from any of the players who are using the api
 
-    private static final Map<Integer, EmptySquare> EMPTY_SQUARES = createSquares(); // creating all the empty squares
+    protected final int squareCoordinate;
 
-    private static Map<Integer, EmptySquare> createSquares() {
+    private static final Map<Integer, EmptySquare> EMPTY_SQUARES_CACHE = createAllPossibleEmptySquares();
+
+    private static Map<Integer, EmptySquare> createAllPossibleEmptySquares() {
+
         final Map<Integer, EmptySquare> emptySquareMap = new HashMap<>();
+
         for (int i = 0; i < BoardUtils.NUM_SQUARES; i++) {
             emptySquareMap.put(i, new EmptySquare(i));
         }
@@ -23,12 +26,10 @@ public abstract class Square {
     }
 
     public static Square createSquare(final int squareCoordinate, final Piece piece) {
-        return piece != null ? new OccupiedSquare((squareCoordinate), piece) : EMPTY_SQUARES.get(squareCoordinate);
+        return piece != null ? new OccupiedSquare(squareCoordinate, piece) : EMPTY_SQUARES_CACHE.get(squareCoordinate);
+    }
 
-    }// since all constructors are privatised the only way to create a new square is
-     // using this method
-
-    private Square(int squareCoordinate) {
+    private Square(final int squareCoordinate) {
         this.squareCoordinate = squareCoordinate;
     }
 
@@ -37,12 +38,11 @@ public abstract class Square {
     public abstract Piece getPiece();
 
     public int getSquareCoordinate() {
-        return this.squareCoordinate
-
-        ;
+        return this.squareCoordinate;
     }
 
     public static final class EmptySquare extends Square {
+
         private EmptySquare(final int coordinate) {
             super(coordinate);
         }
@@ -64,28 +64,27 @@ public abstract class Square {
     }
 
     public static final class OccupiedSquare extends Square {
-        private final Piece pieceOnSquare; // cant be referenced without calling get piece on it
+        private final Piece pieceOnSquare;
 
-        private OccupiedSquare(final int coordinate, Piece pieceOnSquare) {
-            super(coordinate);
+        private OccupiedSquare(int squareCoordinate, final Piece pieceOnSquare) {
+            super(squareCoordinate);
             this.pieceOnSquare = pieceOnSquare;
         }
 
         @Override
         public String toString() {
-            return getPiece().getColor().isBlack() ? getPiece().toString().toLowerCase() : getPiece().toString();
+            return getPiece().getPieceColor().isBlack() ? getPiece().toString().toLowerCase()
+                    : getPiece().toString();
         }
 
         @Override
         public boolean isSquareOccupied() {
-            return false;
+            return true;
         }
 
         @Override
-
         public Piece getPiece() {
-            return pieceOnSquare;
+            return this.pieceOnSquare;
         }
     }
-
 }
