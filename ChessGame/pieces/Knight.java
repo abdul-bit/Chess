@@ -11,18 +11,17 @@ import ChessGame.board.Board;
 import ChessGame.board.BoardUtils;
 import ChessGame.board.Move;
 import ChessGame.board.Square;
-import ChessGame.board.Move.*;
 
 public class Knight extends Piece {
 
     private final static int[] CANDIDATE_MOVE_COORDINATES = { -17, -15, -10, -6, 6, 10, 15, 17 };
 
     public Knight(final Color pieceColor, final int piecePosition) {
-        super(PieceType.KNIGHT, piecePosition, pieceColor, true);
+        super(PieceType.KNIGHT, pieceColor, piecePosition, true);
     }
 
-    public Knight(final Color pieceColor, final int piecePosition, final boolean isFirstMove) {
-        super(PieceType.KNIGHT, piecePosition, pieceColor, isFirstMove);
+    public Knight(final Color color, final int piecePosition, final boolean isFirstMove) {
+        super(PieceType.KNIGHT, color, piecePosition, isFirstMove);
     }
 
     @Override
@@ -34,21 +33,22 @@ public class Knight extends Piece {
             final int candidateDestinationCoordinate = this.piecePosition + currentCandidateOffset;
 
             if (BoardUtils.isValidSquareCoordinate(candidateDestinationCoordinate)) {
-                if (isFirstColumnExclusion(this.piecePosition, currentCandidateOffset) ||
-                        isSecondColumnExclusion(this.piecePosition, currentCandidateOffset) ||
-                        isSeventhColumnExclusion(this.piecePosition, currentCandidateOffset) ||
-                        isEighthColumnExclusion(this.piecePosition, currentCandidateOffset)) {
+                if (isFirstColumnExclusion(this.piecePosition, currentCandidateOffset)
+                        || isSecondColumnExclusion(this.piecePosition, currentCandidateOffset)
+                        || isSeventhColumnExclusion(this.piecePosition, currentCandidateOffset)
+                        || isEighthColumnExclusion(this.piecePosition, currentCandidateOffset)) {
                     continue;
                 }
 
                 final Square candidateDestinationSquare = board.getSquare(candidateDestinationCoordinate);
                 if (!candidateDestinationSquare.isSquareOccupied()) {
-                    legalMoves.add(new MajorMove(board, this, candidateDestinationCoordinate));
+                    legalMoves.add(new Move.MajorMove(board, this, candidateDestinationCoordinate));
                 } else {
                     final Piece pieceAtDestination = candidateDestinationSquare.getPiece();
                     final Color pieceColor = pieceAtDestination.getPieceColor();
                     if (this.pieceColor != pieceColor) {
-                        legalMoves.add(new AttackMove(board, this, candidateDestinationCoordinate, pieceAtDestination));
+                        legalMoves.add(new Move.MajorAttackMove(board, this, candidateDestinationCoordinate,
+                                pieceAtDestination));
                     }
                 }
             }
@@ -67,8 +67,8 @@ public class Knight extends Piece {
     }
 
     private static boolean isFirstColumnExclusion(final int currentPosition, final int candidateOffset) {
-        return BoardUtils.FIRST_COLUMN[currentPosition] && (candidateOffset == -17 || (candidateOffset == -10) ||
-                candidateOffset == 6 || candidateOffset == 15);
+        return BoardUtils.FIRST_COLUMN[currentPosition] && (candidateOffset == -17 || (candidateOffset == -10)
+                || candidateOffset == 6 || candidateOffset == 15);
     }
 
     private static boolean isSecondColumnExclusion(final int currentPosition, final int candidateOffset) {
@@ -80,7 +80,7 @@ public class Knight extends Piece {
     }
 
     private static boolean isEighthColumnExclusion(final int currentPosition, final int candidateOffset) {
-        return BoardUtils.EIGHTH_COLUMN[currentPosition] && (candidateOffset == -15 || candidateOffset == -6 ||
-                candidateOffset == 10 || candidateOffset == 17);
+        return BoardUtils.EIGHTH_COLUMN[currentPosition]
+                && (candidateOffset == -15 || candidateOffset == -6 || candidateOffset == 10 || candidateOffset == 17);
     }
 }

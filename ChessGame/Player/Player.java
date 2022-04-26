@@ -27,17 +27,9 @@ public abstract class Player {
 
         this.board = board;
         this.playerKing = establishKing();
+        this.isInCheck = !Player.calculateAttacksOnSquare(this.playerKing.getPiecePosition(), opponentMoves).isEmpty();
         this.legalMoves = ImmutableList
                 .copyOf(Iterables.concat(legalMoves, calculateKingCastles(legalMoves, opponentMoves)));
-        this.isInCheck = !Player.calculateAttacksOnSquare(this.playerKing.getPiecePosition(), opponentMoves).isEmpty();
-    }
-
-    public King getPlayerKing() {
-        return this.playerKing;
-    }
-
-    public Collection<Move> getLegalMoves() {
-        return this.legalMoves;
     }
 
     protected static Collection<Move> calculateAttacksOnSquare(int piecePosition, Collection<Move> moves) {
@@ -46,8 +38,14 @@ public abstract class Player {
             if (piecePosition == move.getDestinationCoordinate()) {
                 attackMoves.add(move);
             }
+
         }
+
         return ImmutableList.copyOf(attackMoves);
+    }
+
+    public King getPlayerKing() {
+        return this.playerKing;
     }
 
     private King establishKing() {
@@ -56,14 +54,19 @@ public abstract class Player {
                 return (King) piece;
             }
         }
-        return null;
-        // throw new RuntimeException("Should not reach here! Not a valid board!!");
+
+        throw new RuntimeException("Should not reach here! Not a valid board!!");
+    }
+
+    public Collection<Move> getLegalMoves() {
+        return this.legalMoves;
     }
 
     public boolean isMoveLegal(final Move move) {
         return this.legalMoves.contains(move);
     }
 
+    // TODO Implement Methods
     public boolean isInCheck() {
         return this.isInCheck;
     }
@@ -72,7 +75,7 @@ public abstract class Player {
         return this.isInCheck && !hasEscapeMoves();
     }
 
-    public boolean isInStalemate() {
+    public boolean isInStaleMate() {
         return !this.isInCheck && !hasEscapeMoves();
     }
 
@@ -105,6 +108,7 @@ public abstract class Player {
         if (!kingAttacks.isEmpty()) {
             return new MoveTransition(this.board, move, MoveStatus.LEAVES_PLAYER_IN_CHECK);
         }
+
         return new MoveTransition(transitionBoard, move, MoveStatus.DONE);
     }
 
@@ -115,5 +119,6 @@ public abstract class Player {
     public abstract Player getOpponent();
 
     protected abstract Collection<Move> calculateKingCastles(Collection<Move> playerLegals,
-            Collection<Move> opponentLegals);
+            Collection<Move> opponentsLegals);
+
 }

@@ -10,13 +10,13 @@ public enum MoveStatus {
     ILLEGAL_MOVE {
         @Override
         public boolean isDone() {
-            return true;
+            return false;
         }
     },
     LEAVES_PLAYER_IN_CHECK {
         @Override
         public boolean isDone() {
-            return true;
+            return false;
         }
     };
 

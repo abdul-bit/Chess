@@ -13,23 +13,25 @@ public abstract class Piece {
     protected final boolean isFirstMove;
     private final int cachedHashCode;
 
-    Piece(final PieceType pieceType,
-            final int piecePosition,
-            final Color pieceColor,
+    public Piece(final PieceType pieceType, final Color pieceColor, final int piecePosition,
             final boolean isFirstMove) {
-        this.pieceType = pieceType;
         this.pieceColor = pieceColor;
         this.piecePosition = piecePosition;
+        this.pieceType = pieceType;
         this.isFirstMove = isFirstMove;
-        this.cachedHashCode = computerHashCode();
+        this.cachedHashCode = computeHashCode();
     }
 
-    int computerHashCode() {
+    private int computeHashCode() {
         int result = pieceType.hashCode();
         result = 31 * result + pieceColor.hashCode();
         result = 31 * result + piecePosition;
         result = 31 * result + (isFirstMove ? 1 : 0);
         return result;
+    }
+
+    public boolean isFirstMove() {
+        return this.isFirstMove;
     }
 
     @Override
@@ -41,8 +43,8 @@ public abstract class Piece {
             return false;
         }
         final Piece otherPiece = (Piece) other;
-        return piecePosition == otherPiece.getPiecePosition() && pieceType == otherPiece.getPieceType() &&
-                pieceColor == otherPiece.getPieceColor() && isFirstMove == otherPiece.isFirstMove();
+        return piecePosition == otherPiece.getPiecePosition() && pieceType == otherPiece.getPieceType()
+                && pieceColor == otherPiece.getPieceColor() && isFirstMove == otherPiece.isFirstMove();
     }
 
     @Override
@@ -58,10 +60,6 @@ public abstract class Piece {
         return this.pieceColor;
     }
 
-    public boolean isFirstMove() {
-        return this.isFirstMove;
-    }
-
     public PieceType getPieceType() {
         return this.pieceType;
     }
@@ -75,6 +73,7 @@ public abstract class Piece {
     public abstract Piece movePiece(Move move);
 
     public enum PieceType {
+
         PAWN("P", 100) {
             @Override
             public boolean isKing() {
@@ -105,12 +104,14 @@ public abstract class Piece {
 
             @Override
             public boolean isRook() {
+                // TODO Auto-generated method stub
                 return false;
             }
         },
         ROOK("R", 500) {
             @Override
             public boolean isKing() {
+                // TODO Auto-generated method stub
                 return false;
             }
 
@@ -162,5 +163,7 @@ public abstract class Piece {
         public abstract boolean isKing();
 
         public abstract boolean isRook();
+
     }
+
 }

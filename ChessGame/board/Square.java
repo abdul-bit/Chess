@@ -25,15 +25,16 @@ public abstract class Square {
         return ImmutableMap.copyOf(emptySquareMap);
     }
 
-    public static Square createSquare(final int squareCoordinate, final Piece piece) {
-        return piece != null ? new OccupiedSquare(squareCoordinate, piece) : EMPTY_SQUARES_CACHE.get(squareCoordinate);
+    public static Square createSquare(final int SquareCoordinate, final Piece piece) {
+        return piece != null ? new OccupiedSquare(SquareCoordinate, piece) : EMPTY_SQUARES_CACHE.get(SquareCoordinate);
     }
 
     private Square(final int squareCoordinate) {
         this.squareCoordinate = squareCoordinate;
+
     }
 
-    public abstract boolean isSquareOccupied();
+    public abstract boolean isSquareOccupied(); // Checks to see if theres a chess piece on the Square //
 
     public abstract Piece getPiece();
 
@@ -42,8 +43,7 @@ public abstract class Square {
     }
 
     public static final class EmptySquare extends Square {
-
-        private EmptySquare(final int coordinate) {
+        EmptySquare(final int coordinate) {
             super(coordinate);
         }
 
@@ -61,14 +61,16 @@ public abstract class Square {
         public Piece getPiece() {
             return null;
         }
+
     }
 
     public static final class OccupiedSquare extends Square {
         private final Piece pieceOnSquare;
 
-        private OccupiedSquare(int squareCoordinate, final Piece pieceOnSquare) {
+        OccupiedSquare(int squareCoordinate, final Piece pieceonSquare) {
             super(squareCoordinate);
-            this.pieceOnSquare = pieceOnSquare;
+            this.pieceOnSquare = pieceonSquare;
+
         }
 
         @Override
@@ -85,6 +87,7 @@ public abstract class Square {
         @Override
         public Piece getPiece() {
             return this.pieceOnSquare;
+
         }
     }
 }
