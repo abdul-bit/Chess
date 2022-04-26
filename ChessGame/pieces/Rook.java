@@ -1,14 +1,16 @@
 package ChessGame.Pieces;
 
 import java.util.Collection;
-import java.util.Collections;
+
 import java.util.List;
 
-import ChessGame.Board.Board;
-import ChessGame.Board.BoardUtils;
-import ChessGame.Board.Move;
-import ChessGame.Board.Square;
-import ChessGame.Board.Move.*;
+import com.google.common.collect.ImmutableList;
+
+import ChessGame.board.Board;
+import ChessGame.board.BoardUtils;
+import ChessGame.board.Move;
+import ChessGame.board.Square;
+import ChessGame.board.Move.*;
 
 import java.util.ArrayList;
 
@@ -50,7 +52,7 @@ public final class Rook extends Piece {
             }
 
         }
-        return Collections.unmodifiableList(legalMoves);
+        return ImmutableList.copyOf(legalMoves);
     }
 
     private static boolean isFirstColumn(final int currentCandidate,

@@ -2,14 +2,17 @@ package ChessGame.Player;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
+
 import java.util.List;
 
-import ChessGame.Board.Board;
-import ChessGame.Board.Move;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterables;
+
 import ChessGame.Pieces.Color;
 import ChessGame.Pieces.King;
 import ChessGame.Pieces.Piece;
+import ChessGame.board.Board;
+import ChessGame.board.Move;
 
 public abstract class Player {
     protected final Board board;
@@ -22,10 +25,8 @@ public abstract class Player {
             final Collection<Move> opponentMoves) {
         this.board = board;
         this.playerKing = establishKing();
-        // this.isInCheck = !calculateAttacksOnTile(this.playerKing.getPiecePosition(),
-        // opponentLegals).isEmpty();
-        // playerLegals.addAll(calculateKingCastles(playerLegals, opponentLegals));
-        this.legalMoves = legalMoves;
+        this.legalMoves = ImmutableList
+                .copyOf(Iterables.concat(legalMoves, calculateKingCastles(legalMoves, opponentMoves)));
         this.isInCheck = !Player.calculateAttacksOnSquare(this.playerKing.getPiecePosition(), opponentMoves).isEmpty();
     }
 
@@ -36,7 +37,7 @@ public abstract class Player {
                 attackMoves.add(move);
             }
         }
-        return Collections.unmodifiableList(attackMoves);
+        return ImmutableList.copyOf(attackMoves);
     }
 
     private King establishKing() {
@@ -45,10 +46,8 @@ public abstract class Player {
                 return (King) piece;
             }
         }
-        throw new RuntimeException("not a valid board!!");
+        throw new RuntimeException("Cannot enter here!! not a valid board!!");
     }
-
-    // todo
 
     public boolean isMoveLegal(final Move move) {
         return this.legalMoves.contains(move);
@@ -101,7 +100,7 @@ public abstract class Player {
         return legalMoves;
     }
 
-    private King getPlayerKing() {
+    public King getPlayerKing() {
         return this.playerKing;
     }
 

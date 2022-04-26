@@ -1,13 +1,15 @@
 package ChessGame.Pieces;
 
 import java.util.Collection;
-import java.util.Collections;
+
 import java.util.List;
 
-import ChessGame.Board.Board;
-import ChessGame.Board.BoardUtils;
-import ChessGame.Board.Move;
-import ChessGame.Board.Move.*;
+import com.google.common.collect.ImmutableList;
+
+import ChessGame.board.Board;
+import ChessGame.board.BoardUtils;
+import ChessGame.board.Move;
+import ChessGame.board.Move.*;
 
 import java.util.ArrayList;
 
@@ -63,7 +65,7 @@ public class Pawn extends Piece {
             }
 
         }
-        return Collections.unmodifiableList(legalMoves);
+        return ImmutableList.copyOf(legalMoves);
     }
 
     @Override

@@ -1,11 +1,13 @@
-package ChessGame.Board;
+package ChessGame.board;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.google.common.collect.ImmutableMap;
+
 import ChessGame.Pieces.Piece;
 
+//we have declared the square class as abstract to prevent its instatiation whereas we can instantiate concrete subclasses
 public abstract class Square {
     protected final int squareCoordinate; // to prevent mutation from any of the players who are using the api
 
@@ -17,7 +19,7 @@ public abstract class Square {
             emptySquareMap.put(i, new EmptySquare(i));
         }
 
-        return Collections.unmodifiableMap(emptySquareMap);
+        return ImmutableMap.copyOf(emptySquareMap);
     }
 
     public static Square createSquare(final int squareCoordinate, final Piece piece) {
@@ -81,6 +83,8 @@ public abstract class Square {
     }
 
     public int getSquareCoordinate() {
-        return this.squareCoordinate;
+        return this.squareCoordinate
+
+        ;
     }
 }

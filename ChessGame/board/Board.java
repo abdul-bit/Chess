@@ -1,11 +1,9 @@
-package ChessGame.Board;
+package ChessGame.board;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-
 import java.util.Map;
 
 import com.google.common.collect.ImmutableList;
@@ -50,7 +48,7 @@ public class Board {
         for (int i = 0; i < BoardUtils.NUM_SQUARES; i++) {
             final String squareText = this.gameBoard.get(i).toString();
             builder.append(String.format("%3s", squareText));
-            if ((i + 1) % BoardUtils.NUM_TILES_PER_ROW == 0) {
+            if ((i + 1) % BoardUtils.NUM_SQUARES_PER_ROW == 0) {
                 builder.append("\n");
             }
 
@@ -58,15 +56,35 @@ public class Board {
         return builder.toString();
     }
 
-    private Collection<Move> calculateLegalMoves(Collection<Piece> pieces) {
+    public Player whitePlayer() {
+        return this.whitePlayer;
+    }
+
+    public Player blackPlayer() {
+        return this.blackPlayer;
+    }
+
+    public Player currentPlayer() {
+        return this.currentPlayer;
+    }
+
+    public Collection<Piece> getBlackPieces() {
+        return this.blackPieces;
+    }
+
+    public Collection<Piece> getWhitePieces() {
+        return this.whitePieces;
+    }
+
+    private Collection<Move> calculateLegalMoves(final Collection<Piece> pieces) {
         final List<Move> legalMoves = new ArrayList<>();
         for (final Piece piece : pieces) {
             legalMoves.addAll(piece.CalculateLegalMoves(this));
         }
-        return Collections.unmodifiableList(legalMoves);
+        return ImmutableList.copyOf(legalMoves);
     }
 
-    private Collection<Piece> calculateActivePieces(List<Square> gameBoard, Color color) {
+    private static Collection<Piece> calculateActivePieces(List<Square> gameBoard, Color color) {
 
         final List<Piece> activePieces = new ArrayList<>();
         for (final Square square : gameBoard) {
@@ -78,7 +96,7 @@ public class Board {
             }
         }
 
-        return Collections.unmodifiableList(activePieces);
+        return ImmutableList.copyOf(activePieces);
     }
 
     public Square getSquare(final int squareCoordinate) {
@@ -136,8 +154,13 @@ public class Board {
         return builder.build();
     }
 
+    public Iterable<Move> getAllLegalMoves() {
+        return Iterables.unmodifiableIterable(
+                Iterables.concat(this.whitePlayer.getLegalMoves(), this.blackPlayer.getLegalMoves()));
+    }
+
     public static class Builder {
-        private final Map<Integer, Piece> boardConfig;
+        Map<Integer, Piece> boardConfig;
         Color nextMoveMaker;
         Pawn EnPassantPawn;
 
@@ -166,31 +189,6 @@ public class Board {
 
         }
 
-    }
-
-    public Collection<Piece> getBlackPieces() {
-        return this.blackPieces;
-    }
-
-    public Collection<Piece> getWhitePieces() {
-        return this.whitePieces;
-    }
-
-    public Player blackPlayer() {
-        return this.blackPlayer;
-    }
-
-    public Player whitePlayer() {
-        return this.whitePlayer;
-    }
-
-    public Player currentPlayer() {
-        return this.currentPlayer;
-    }
-
-    public Iterable<Move> getAllLegalMoves() {
-        return Iterables.unmodifiableIterable(
-                Iterables.concat(this.whitePlayer.getLegalMoves(), this.blackPlayer.getLegalMoves()));
     }
 
 }

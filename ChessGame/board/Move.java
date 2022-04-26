@@ -1,9 +1,9 @@
-package ChessGame.Board;
+package ChessGame.board;
 
-import ChessGame.Board.Board.Builder;
 import ChessGame.Pieces.Pawn;
 import ChessGame.Pieces.Piece;
 import ChessGame.Pieces.Rook;
+import ChessGame.board.Board.Builder;
 
 public abstract class Move {
     final Board board;

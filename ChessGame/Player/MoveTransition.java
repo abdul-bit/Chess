@@ -1,7 +1,7 @@
 package ChessGame.Player;
 
-import ChessGame.Board.Board;
-import ChessGame.Board.Move;
+import ChessGame.board.Board;
+import ChessGame.board.Move;
 
 //when you transition from one move to another and all the information you wanna carry in that.
 public class MoveTransition {

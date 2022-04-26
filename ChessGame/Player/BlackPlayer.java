@@ -2,17 +2,19 @@ package ChessGame.Player;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
+
 import java.util.List;
 
-import ChessGame.Board.Board;
-import ChessGame.Board.Move;
-import ChessGame.Board.Square;
-import ChessGame.Board.Move.KingSideCastleMove;
+import com.google.common.collect.ImmutableList;
+
 import ChessGame.Pieces.Color;
 import ChessGame.Pieces.Piece;
 import ChessGame.Pieces.Rook;
-import ChessGame.Board.Move.QueenSideCastleMove;
+import ChessGame.board.Board;
+import ChessGame.board.Move;
+import ChessGame.board.Square;
+import ChessGame.board.Move.KingSideCastleMove;
+import ChessGame.board.Move.QueenSideCastleMove;
 
 public class BlackPlayer extends Player {
 
@@ -74,7 +76,7 @@ public class BlackPlayer extends Player {
 
         }
 
-        return Collections.unmodifiableCollection(KingCastles);
+        return ImmutableList.copyOf(KingCastles);
     }
 
 }

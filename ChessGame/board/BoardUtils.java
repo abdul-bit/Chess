@@ -1,4 +1,4 @@
-package ChessGame.Board;
+package ChessGame.board;
 
 public class BoardUtils {
 
@@ -16,7 +16,7 @@ public class BoardUtils {
 
     public static final int NUM_SQUARES = 64;
 
-    public static final int NUM_TILES_PER_ROW = 8;
+    public static final int NUM_SQUARES_PER_ROW = 8;
 
     private BoardUtils() {
         throw new RuntimeException("You cannot instantiate this class");
@@ -32,7 +32,7 @@ public class BoardUtils {
         final boolean[] column = new boolean[NUM_SQUARES];
         do {
             column[columnNumber] = true;
-            columnNumber += NUM_TILES_PER_ROW;
+            columnNumber += NUM_SQUARES_PER_ROW;
         } while (columnNumber < NUM_SQUARES);
         return column;
 
@@ -44,7 +44,7 @@ public class BoardUtils {
         do {
             row[rowNumber] = true;
             rowNumber++;
-        } while (rowNumber % NUM_TILES_PER_ROW != 0);
+        } while (rowNumber % NUM_SQUARES_PER_ROW != 0);
         return row;
     }
 

@@ -2,8 +2,8 @@ package ChessGame.Pieces;
 
 import java.util.Collection;
 
-import ChessGame.Board.Board;
-import ChessGame.Board.Move;
+import ChessGame.board.Board;
+import ChessGame.board.Move;
 
 public abstract class Piece {
     protected final PieceType pieceType;
