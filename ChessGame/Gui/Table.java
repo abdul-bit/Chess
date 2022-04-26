@@ -3,24 +3,40 @@ package ChessGame.Gui;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
+import ChessGame.Pieces.Piece;
+import ChessGame.Player.MoveTransition;
 import ChessGame.board.Board;
 import ChessGame.board.BoardUtils;
+import ChessGame.board.Move;
+import ChessGame.board.Square;
 
+import javax.imageio.ImageIO;
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+
+import static javax.swing.SwingUtilities.*;
 
 public class Table {
 
     private final JFrame gameFrame;
     private final BoardPanel boardPanel;
-    private final Board chessBoard;
-    String defaultPieceImagesPath = "art/fancy";
+    private Board chessBoard;
+
+    private Square sourceSquare;
+    private Square destinationSquare;
+    private Piece humanMovedPiece;
+    String defaultPieceImagesPath = "C:\\Users\\Abdul\\OneDrive\\Desktop\\chess\\ChessGame\\art\\fancy\\";
     private final Color lightTileColor = Color.decode("#eeeed2");
     private final Color darkTileColor = Color.decode("#769655");
     private final static Dimension OUTER_FRAME_DIMENSION = new Dimension(600, 600);
@@ -52,7 +68,6 @@ public class Table {
         openPGN.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("Open up dat PGN File!!!");
                 System.out.println("Open up dat PGN File!!!");
 
             }
@@ -87,15 +102,15 @@ public class Table {
             validate();
         }
 
-        // public void drawBoard(final Board board) {
-        // removeAll();
-        // for (final TilePanel tilePanel : boardDirection.traverse(boardTiles)) {
-        // tilePanel.drawTile(board);
-        // add(tilePanel);
-        // }
-        // validate();
-        // repaint();
-        // }
+        public void drawBoard(final Board board) {
+            removeAll();
+            for (final SquarePanel squarePanel : boardSquares) { // boardDirection.traverse(boardSquares)
+                squarePanel.drawSquare(board);
+                add(squarePanel);
+            }
+            validate();
+            repaint();
+        }
     }
 
     private class SquarePanel extends JPanel {
@@ -110,70 +125,77 @@ public class Table {
             assignSquareColor();
             assignSquarePieceIcon(chessBoard);
 
-            // addMouseListener(new MouseListener() {
-            // @Override
-            // public void mouseClicked(final MouseEvent e) {
+            addMouseListener(new MouseListener() {
+                @Override
+                public void mouseClicked(final MouseEvent e) {
 
-            // if(isRightMouseButton(e)) {
+                    if (isRightMouseButton(e)) {
 
-            // sourceTile = null;
-            // destinationTile = null;
-            // humanMovedPiece = null;
+                        sourceSquare = null;
+                        destinationSquare = null;
+                        humanMovedPiece = null;
 
-            // } else if (isLeftMouseButton(e)) {
-            // if(sourceTile == null) {
-            // sourceTile = chessBoard.getTile(tileID);
-            // humanMovedPiece = sourceTile.getPiece();
-            // if (humanMovedPiece == null) {
-            // sourceTile = null;
-            // }
-            // } else {
-            // destinationTile = chessBoard.getTile(tileID);
-            // final Move move = Move.MoveFactory.createMove(chessBoard,
-            // sourceTile.getTileCoordinate(), destinationTile.getTileCoordinate());
-            // final MoveTransition transition = chessBoard.currentPlayer().makeMove(move);
-            // if(transition.getMoveStatus().isDone()) {
-            // chessBoard = transition.getTransitionBoard();
-            // moveLog.addMove(move);
-            // //TODO add the move that was made to the move log
-            // }
-            // sourceTile = null;
-            // destinationTile = null;
-            // humanMovedPiece = null;
-            // }
-            // SwingUtilities.invokeLater(new Runnable() {
-            // @Override
-            // public void run() {
-            // gameHistoryPanel.redo(chessBoard, moveLog);
-            // takenPiecesPanel.redo(moveLog);
-            // boardPanel.drawBoard(chessBoard);
-            // }
-            // });
-            // }
-            // }
+                    } else if (isLeftMouseButton(e)) {
+                        if (sourceSquare == null) {
+                            sourceSquare = chessBoard.getSquare(squareID);
+                            humanMovedPiece = sourceSquare.getPiece();
+                            if (humanMovedPiece == null) {
+                                sourceSquare = null;
+                            }
+                        } else {
+                            destinationSquare = chessBoard.getSquare(squareID);
+                            final Move move = Move.MoveFactory.createMove(chessBoard,
+                                    sourceSquare.getSquareCoordinate(), destinationSquare.getSquareCoordinate());
+                            final MoveTransition transition = chessBoard.currentPlayer().makeMove(move);
+                            if (transition.getMoveStatus().isDone()) {
+                                chessBoard = transition.getTransitionBoard();
+                                // moveLog.addMove(move);
+                                // TODO add the move that was made to the move log
+                            }
+                            sourceSquare = null;
+                            destinationSquare = null;
+                            humanMovedPiece = null;
+                        }
+                        SwingUtilities.invokeLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                // gameHistoryPanel.redo(chessBoard, moveLog);
+                                // takenPiecesPanel.redo(moveLog);
+                                boardPanel.drawBoard(chessBoard);
+                            }
+                        });
+                    }
+                }
 
-            // @Override
-            // public void mousePressed(final MouseEvent e) {
+                @Override
+                public void mousePressed(final MouseEvent e) {
 
-            // }
+                }
 
-            // @Override
-            // public void mouseReleased(final MouseEvent e) {
+                @Override
+                public void mouseReleased(final MouseEvent e) {
 
-            // }
+                }
 
-            // @Override
-            // public void mouseEntered(final MouseEvent e) {
+                @Override
+                public void mouseEntered(final MouseEvent e) {
 
-            // }
+                }
 
-            // @Override
-            // public void mouseExited(final MouseEvent e) {
+                @Override
+                public void mouseExited(final MouseEvent e) {
 
-            // }
-            // });
+                }
+            });
 
             validate();
+        }
+
+        public void drawSquare(Board board) {
+            assignSquareColor();
+            assignSquarePieceIcon(board);
+            validate();
+            repaint();
         }
 
         private void assignSquarePieceIcon(final Board board) {
@@ -186,7 +208,7 @@ public class Table {
 
                     final BufferedImage image = ImageIO.read(new File(defaultPieceImagesPath
                             + board.getSquare(this.squareID).getPiece().getPieceColor().toString().substring(0, 1) +
-                            board.getSquare(this.squareID).getPiece().toString() + ".jpg"));
+                            board.getSquare(this.squareID).getPiece().toString() + ".gif"));
                     add(new JLabel(new ImageIcon(image)));
 
                 } catch (IOException e) {

@@ -3,23 +3,23 @@ package ChessGame.Player;
 public enum MoveStatus {
     DONE {
         @Override
-        boolean isDone() {
+        public boolean isDone() {
             return true;
         }
     },
     ILLEGAL_MOVE {
         @Override
-        boolean isDone() {
-            return false;
+        public boolean isDone() {
+            return true;
         }
     },
     LEAVES_PLAYER_IN_CHECK {
         @Override
-        boolean isDone() {
-            return false;
+        public boolean isDone() {
+            return true;
         }
     };
 
-    abstract boolean isDone();
+    public abstract boolean isDone();
 
 }
