@@ -24,7 +24,7 @@ public abstract class Move {
 
         final Builder builder = new Builder();
         for (final Piece piece : this.board.currentPlayer().getActivePieces()) {
-            // todo hashcode and equals
+
             if (!this.movedPiece.equals(piece)) {
                 builder.setPiece(piece);
             }
@@ -192,7 +192,6 @@ public abstract class Move {
                 builder.setPiece(piece);
             }
             builder.setPiece(this.movedPiece.movePiece(this));
-            // todo first move
             builder.setPiece(new Rook(this.castleRook.getColor(), this.castleRookDestination));
             builder.setMoveMaker(this.board.currentPlayer().getOpponent().getColor());
             return builder.build();

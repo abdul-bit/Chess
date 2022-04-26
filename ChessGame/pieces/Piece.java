@@ -12,7 +12,9 @@ public abstract class Piece {
     protected final boolean isFirstMove;
     private final int cachedHashcode;
 
-    Piece(final PieceType pieceType, final int piecePosition, final Color pieceColor) {
+    Piece(final PieceType pieceType,
+            final int piecePosition,
+            final Color pieceColor) {
         this.pieceType = pieceType;
         this.pieceColor = pieceColor;
         this.piecePosition = piecePosition;
@@ -40,7 +42,7 @@ public abstract class Piece {
         }
         final Piece otherPiece = (Piece) other;
         return piecePosition == otherPiece.getPiecePosition() && pieceType == otherPiece.getPieceType()
-                && pieceColor == otherPiece.getColor() && isFirstMove == otherPiece.isFirstMove;
+                && pieceColor == otherPiece.getColor() && isFirstMove == otherPiece.isFirstMove();
 
     }
 

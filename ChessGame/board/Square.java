@@ -36,6 +36,12 @@ public abstract class Square {
 
     public abstract Piece getPiece();
 
+    public int getSquareCoordinate() {
+        return this.squareCoordinate
+
+        ;
+    }
+
     public static final class EmptySquare extends Square {
         private EmptySquare(final int coordinate) {
             super(coordinate);
@@ -67,7 +73,7 @@ public abstract class Square {
 
         @Override
         public String toString() {
-            return getPiece().getColor().isBlack() ? "B_" + getPiece().toString() : "W_" + getPiece().toString();
+            return getPiece().getColor().isBlack() ? getPiece().toString().toLowerCase() : getPiece().toString();
         }
 
         @Override
@@ -82,9 +88,4 @@ public abstract class Square {
         }
     }
 
-    public int getSquareCoordinate() {
-        return this.squareCoordinate
-
-        ;
-    }
 }

@@ -9,7 +9,9 @@ public class MoveTransition {
     final Move move;
     private final MoveStatus moveStatus; // we can do the move or can we do the move will it result in check etc.
 
-    public MoveTransition(final Board transitionBoard, final Move move, final MoveStatus moveStatus) {
+    public MoveTransition(final Board transitionBoard,
+            final Move move,
+            final MoveStatus moveStatus) {
         this.transitionBoard = transitionBoard;
         this.move = move;
         this.moveStatus = moveStatus;
