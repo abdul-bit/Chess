@@ -5,12 +5,9 @@
 2. [Features](#features)
 3. [Installation](#installation)
 4. [Usage](#usage)
-5. [Project Structure](#project-structure)
-6. [Class Diagrams](#class-diagrams)
-7. [Benefits of OOP Design](#benefits-of-oop-design)
-8. [Contributing](#contributing)
-9. [License](#license)
-10. [Contact](#contact)
+5. [Project Overview](#project-overview)
+6. [Benefits of OOP Design](#benefits-of-oop-design)
+7. [Contact](#contact)
 
 ## Introduction
 This project is a fully-functional chess game implemented in Java, designed using object-oriented principles. It features a graphical user interface (GUI) that allows players to play chess, view taken pieces, and review the game history. Additionally, it supports loading saved games in PGN format and offers preferences to customize the game board.
